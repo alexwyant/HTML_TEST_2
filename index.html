@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>
+    Software Engineering Project Website
+  </title>
+</head>
+
+<body>
+<h1>
+  Alex Wyant, Will Rubin, Cyrus Mika Software Engineering Project
+</h1>
+<h2>
+  Choose how you want to enter your numbers:
+</h2>
+<div id="input-choices">
+  <label for="file-upload">Upload a file:</label>
+  <input type="file" id="file-upload" accept=".txt">
+  <br>
+  <label for="number-input">Type your numbers (separated by commas):</label>
+  <textarea id="number-input" rows="4" cols="50"></textarea>
+  <br>
+</div>
+<hr>
+<h2>
+  Output options:
+</h2>
+<div id="output-options">
+  <label for="output-file">Choose an output file name:</label>
+  <input type="text" id="output-file" value="output.txt">
+</div>
+<br>
+<button id="submit-button">Submit</button>
+<br>
+<div id="results">
+
+</div>
+
+<script>
+  const submitButton = document.getElementById('submit-button');
+  const resultsDiv = document.getElementById('results');
+
+  submitButton.addEventListener('click', () => {
+    const fileUpload = document.getElementById('file-upload');
+    const numberInput = document.getElementById('number-input');
+    const outputFile = document.getElementById('output-file').value;
+
+    // Check if user selected a file or entered numbers
+    if (fileUpload.files.length === 0 && numberInput.value === '') {
+      resultsDiv.textContent = 'Error: Please choose a file to upload or enter some numbers.';
+      return;
+    }
+
+    // Send data (file or numbers) and output file name to the backend for computation
+    // (This part requires a backend script to handle the computation and file I/O)
+    const data = {
+      // Include logic to handle file data or parsed numbers from numberInput.value
+    };
+    fetch('/compute', {
+      method: 'POST',
+      body: JSON.stringify({ data, outputFile }),
+    })
+      .then(response => response.json())
+      .then(responseData => {
+        if (responseData.success) {
+          resultsDiv.textContent = 'Computation successful! Results are available in ' + outputFile;
+        } else {
+          resultsDiv.textContent = 'Computation failed: ' + responseData.error;
+        }
+      })
+      .catch(error => {
+        resultsDiv.textContent = 'Error: ' + error.message;
+      });
+  });
+</script>
+</body>
+</html>
